@@ -1,17 +1,19 @@
 package communicationChannel;
 
-public abstract class Task extends Thread {  
-	Broker broker;
-	Runnable runnable;
-	
-	Task(Broker b, Runnable r) {
-        this.broker = b;
-        this.runnable = r;
+public abstract class Task implements Runnable {
+    protected Channel channel; // Channel for communication
+    protected static Broker broker; // Static reference to the broker
+
+    public Task(Channel channel, Broker broker) {
+        this.channel = channel;
+        this.broker = broker;
     }
-	
-	public void run() {
-		runnable.run();
-	}
-	
-	 static Broker getBroker();	
+
+    // Static method to get the broker reference
+    public static Broker getBroker() {
+        return broker;
+    }
+
+    @Override
+    public abstract void run();
 }
