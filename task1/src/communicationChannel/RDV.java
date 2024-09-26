@@ -1,16 +1,43 @@
 package communicationChannel;
 
 public class RDV {
-    private Broker b_connect;
-    private Broker b_accept;
+    private ChannelImpl ac;  // accepting channel
+    private ChannelImpl cc;  // connecting channel
+    private BrokerImpl ab;   // accepting broker
+    private BrokerImpl cb;   // connecting broker
 
-    public Channel connect(Broker b) {
-        this.b_connect = b;
-        return new Channel(new CircularBuffer(1024), new CircularBuffer(1024)); // Example buffer sizes
+    // Synchronized wait method to avoid busy waiting
+    private synchronized void waitForConnection() {
+        while (ac == null || cc == null) {
+            try {
+                wait();
+            } catch (InterruptedException ignored) {}
+        }
     }
 
-    public Channel accept(Broker b) {
-        this.b_accept = b;
-        return new Channel(new CircularBuffer(1024), new CircularBuffer(1024)); // Example buffer sizes
+    public synchronized ChannelImpl connect(BrokerImpl cb, int port) {
+        this.cb = cb;
+        cc = new ChannelImpl(cb, port);
+
+        if (ac != null) {
+            ac.connect(cc, cb.getName());
+            notifyAll();
+        } else {
+            waitForConnection();
+        }
+        return cc;
+    }
+
+    public synchronized ChannelImpl accept(BrokerImpl ab, int port) {
+        this.ab = ab;
+        ac = new ChannelImpl(ab, port);
+
+        if (cc != null) {
+            ac.connect(cc, ab.getName());
+            notifyAll();
+        } else {
+            waitForConnection();
+        }
+        return ac;
     }
 }
