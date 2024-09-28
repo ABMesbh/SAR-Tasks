@@ -21,8 +21,10 @@ public class RDV {
 
         if (ac != null) {
             ac.connect(cc, cb.getName());
+            // System.out.println("Connection established between " + ab.getName() + " and " + cb.getName());
             notifyAll();
         } else {
+            System.out.println(cb.getName() + " is waiting for connection " );
             waitForConnection();
         }
         return cc;
@@ -34,8 +36,10 @@ public class RDV {
 
         if (cc != null) {
             ac.connect(cc, ab.getName());
+            System.out.println("Connection established between " + ab.getName() + " and " + cb.getName());
             notifyAll();
         } else {
+            System.out.println(ab.getName() + " is waiting for connection " );
             waitForConnection();
         }
         return ac;

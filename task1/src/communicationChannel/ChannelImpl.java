@@ -7,7 +7,7 @@ public class ChannelImpl extends Channel {
     private CircularBuffer out;
     private ChannelImpl remoteChannel;
     private boolean disconnected = false;
-    private boolean dangling = false;
+    // private boolean dangling = false;
     private String remoteName;
 
     public ChannelImpl(BrokerImpl broker, int port) {
@@ -30,7 +30,7 @@ public class ChannelImpl extends Channel {
                 return;
             }
             disconnected = true;
-            remoteChannel.dangling = true;
+            // remoteChannel.dangling = true;
         }
         synchronized (out) {
             out.notifyAll();
@@ -49,6 +49,9 @@ public class ChannelImpl extends Channel {
     public int read(byte[] bytes, int offset, int length) {
         int nbytes = 0;
         synchronized (in) {
+            if (disconnected) {
+                throw new IllegalStateException("Read error - Channel is disconnected.");
+            }
             while (nbytes == 0 && !disconnected) {
                 if (in.empty()) {
                     try {
@@ -60,9 +63,7 @@ public class ChannelImpl extends Channel {
                     nbytes++;
                 }
             }
-            if (disconnected) {
-                throw new IllegalStateException("Channel is disconnected.");
-            }
+            
         }
         return nbytes;
     }
@@ -71,6 +72,9 @@ public class ChannelImpl extends Channel {
     public int write(byte[] bytes, int offset, int length) {
         int nbytes = 0;
         synchronized (out) {
+            if (disconnected) {
+                throw new IllegalStateException("Write error - Channel is disconnected.");
+            }
             while (nbytes == 0 && !disconnected) {
                 if (out.full()) {
                     try {
@@ -82,9 +86,7 @@ public class ChannelImpl extends Channel {
                     nbytes++;
                 }
             }
-            if (disconnected) {
-                throw new IllegalStateException("Channel is disconnected.");
-            }
+            
             out.notifyAll();
         }
         return nbytes;

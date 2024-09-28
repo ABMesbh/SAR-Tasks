@@ -1,8 +1,15 @@
 package communicationChannel;
 
 public abstract class Broker {
-    Broker(String name);  
-    Channel accept(int port);
-    Channel connect(String name, int port);
+    protected String name;
+    Broker(String name) {
+        this.name = name;
+    }  
+    Channel accept(int port) {
+        return accept(port);
+    }
+    Channel connect(String name, int port) {
+        return connect(name, port);
+    }
     protected abstract String getName();
 }
