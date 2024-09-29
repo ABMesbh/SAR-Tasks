@@ -2,7 +2,6 @@ package echoServerTest;
 
 import communicationChannel.BrokerImpl;
 import communicationChannel.ChannelImpl;
-import communicationChannel.CircularBuffer;
 import communicationChannel.Task;
 
 import java.util.Arrays;

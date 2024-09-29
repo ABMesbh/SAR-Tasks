@@ -57,7 +57,7 @@ public class BrokerImpl extends Broker {
     }
 
     
-    protected String getName() {
+    public String getName() {
         return this.name; // Return the broker name
     }
 }

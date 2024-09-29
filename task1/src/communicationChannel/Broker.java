@@ -11,5 +11,5 @@ public abstract class Broker {
     Channel connect(String name, int port) {
         return connect(name, port);
     }
-    protected abstract String getName();
+    public abstract String getName();
 }
