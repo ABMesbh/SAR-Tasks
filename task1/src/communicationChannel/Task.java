@@ -1,11 +1,9 @@
 package communicationChannel;
 
 public abstract class Task implements Runnable {
-    protected ChannelImpl channel;
     protected BrokerImpl broker;
 
-    public Task(ChannelImpl channel, BrokerImpl broker) {
-        this.channel = channel;
+    public Task(BrokerImpl broker) {
         this.broker = broker;
     }
 

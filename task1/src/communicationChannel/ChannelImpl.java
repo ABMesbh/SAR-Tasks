@@ -7,13 +7,12 @@ public class ChannelImpl extends Channel {
     private CircularBuffer out;
     private ChannelImpl remoteChannel;
     private boolean disconnected = false;
-    // private boolean dangling = false;
     private String remoteName;
 
     public ChannelImpl(BrokerImpl broker, int port) {
         super(broker);
         this.port = port;
-        this.in = new CircularBuffer(64);
+        this.in = new CircularBuffer(256);
     }
 
     public void connect(ChannelImpl remoteChannel, String remoteName) {
@@ -30,7 +29,6 @@ public class ChannelImpl extends Channel {
                 return;
             }
             disconnected = true;
-            // remoteChannel.dangling = true;
         }
         synchronized (out) {
             out.notifyAll();
@@ -81,7 +79,7 @@ public class ChannelImpl extends Channel {
                         out.wait();
                     } catch (InterruptedException ignored) {}
                 }
-                while (nbytes < length && !out.full()) {
+                while (nbytes < length && !out.full() && !disconnected) {
                     out.push(bytes[offset + nbytes]);
                     nbytes++;
                 }
