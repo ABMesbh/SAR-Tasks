@@ -1,6 +1,4 @@
-
-
-### Spécification des canaux de communication
+### Spécification des canaux de communication "By me"
 
 #### 1. Vue d'ensemble
 
@@ -46,4 +44,7 @@ La classe **Task** représente une unité d'exécution (thread) qui communique a
  - Plusieurs tâches peuvent utiliser un port commun
  - Les données échangées via un Channel suivent un ordre strict et aucune donnée ne doit être perdue.
  - Les canaux de communication doivent être thread-safe, permettant à plusieurs threads de lire ou d'écrire en même temps sans risque de corruption des données.
-  
+
+
+#### **N.B** 
+The implementation and the design of Task1 follows the specification given in moodle and the design explained in class
