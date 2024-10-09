@@ -39,7 +39,7 @@ public class testCommunicationChannel {
         public void run() {
 			while (true) {
 				ChannelImpl channel = broker.connect("Server", 1999);
-
+				// 255 bytes is the size of the circular buffer
 				byte[] message = new byte[255];
 				for (int i = 1; i <= 255; i++) {
 					message[i - 1] = (byte) i;
